@@ -1,6 +1,10 @@
 # action.yml
 name: "Blockless Action Setup"
 description: "Installs the Blockless CLI"
+inputs:
+  BLOCKLESS_ACCESS_TOKEN:
+    description: "Your access token for the Blockless Console"
+    required: true
 branding:
   icon: "box"
   color: "green"
@@ -11,3 +15,11 @@ runs:
       shell: bash
       run: |-
         sudo sh -c "curl https://raw.githubusercontent.com/txlabs/blockless-cli/main/download.sh | bash"
+    - name: Authenticate With CLI
+      shell: bash
+      run: |-
+        bls login --auth-token ${{inputs.AKASH_WALLET_KEY}}
+    - name: Verify Auth Token
+      shell: bash
+      run: |-
+        bls whoami
