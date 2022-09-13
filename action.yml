@@ -18,7 +18,7 @@ runs:
     - name: Authenticate With CLI
       shell: bash
       run: |-
-        bls login --auth-token ${{inputs.AKASH_WALLET_KEY}}
+        bls login --auth-token ${{inputs.BLOCKLESS_ACCESS_TOKEN}}
     - name: Verify Auth Token
       shell: bash
       run: |-
