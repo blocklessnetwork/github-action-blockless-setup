@@ -1,6 +1,9 @@
 # action.yml
 name: "Blockless Action Setup"
 description: "Installs the Blockless CLI"
+branding:
+  icon: "box"
+  color: "green"
 runs:
   using: "composite"
   steps:
