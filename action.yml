@@ -1,0 +1,10 @@
+# action.yml
+name: "Blockless Action Setup"
+description: "Installs the Blockless CLI"
+runs:
+  using: "composite"
+  steps:
+    - name: Install Blockless CLI
+      shell: bash
+      run: |-
+        sudo sh -c "curl https://raw.githubusercontent.com/txlabs/blockless-cli/main/download.sh | bash"
