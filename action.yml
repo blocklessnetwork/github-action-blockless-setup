@@ -14,7 +14,7 @@ runs:
     - name: Install Blockless CLI
       shell: bash
       run: |-
-        sudo sh -c "curl https://raw.githubusercontent.com/txlabs/blockless-cli/main/download.sh | bash"
+        sudo sh -c "curl https://raw.githubusercontent.com/BlocklessNetwork/cli/main/download.sh | bash"
     - name: Authenticate With CLI
       shell: bash
       run: |-
