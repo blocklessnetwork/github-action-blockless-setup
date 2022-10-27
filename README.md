@@ -13,5 +13,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Blockless Action Setup
-        uses: txlabs/github-action-blockless-setup@v0.0.1
+        uses: blocklessnetwork/github-action-blockless-setup@v0.0.1
 ```
