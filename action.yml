@@ -1,10 +1,16 @@
 # action.yml
 name: "Blockless Action Setup"
 description: "Installs the Blockless CLI"
+
 inputs:
+  BLOCKLESS_ENDPOINT_URL:
+    description: "URL for the blockless endpoint"
+    default: "https://dashboard.blockless.network"
+    required: false
   BLOCKLESS_ACCESS_TOKEN:
     description: "Your access token for the Blockless Console"
-    required: true
+    required: false
+
 branding:
   icon: "box"
   color: "green"
@@ -15,10 +21,30 @@ runs:
       shell: bash
       run: |-
         sudo sh -c "curl https://raw.githubusercontent.com/BlocklessNetwork/cli/main/download.sh | bash"
-    - name: Authenticate With CLI
+
+    - if: ${{ inputs.BLOCKLESS_ACCESS_TOKEN != null }}
+      name: Authenticate CLI with token
       shell: bash
       run: |-
         bls login --auth-token ${{inputs.BLOCKLESS_ACCESS_TOKEN}}
+
+    - if: ${{ inputs.BLOCKLESS_ACCESS_TOKEN == null }}
+      name: Authenticate CLI with OIDC
+      shell: bash
+      run: |-
+        OIDC_TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}" -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
+        OIDC_JWT=$(echo $OIDC_TOKEN | jq -j '.value')
+        RESPONSE=$(curl -sLS -X POST "${{inputs.BLOCKLESS_ENDPOINT_URL}}/api/auth/swap" -H "Authorization: GithubOIDC $OIDC_JWT")
+        if [[ "$RESPONSE" == *"error"* ]];
+        then
+          ERROR=$(echo $RESPONSE | jq -j '.error')
+          echo $ERROR
+          exit 1
+        else
+          JWT=$(echo $RESPONSE | jq -j '.token')
+          bls login --auth-token $JWT
+        fi
+
     - name: Verify Auth Token
       shell: bash
       run: |-
