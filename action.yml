@@ -47,5 +47,18 @@ runs:
 
     - name: Verify Auth Token
       shell: bash
-      run: |-
-        bls whoami
+      run: |
+        output=$(bls whoami 2>&1)
+        exit_code=$?
+
+        if [ $exit_code -eq 0 ]; then
+          if [[ $output == "Wallet is currently disconnected"* ]]; then
+            echo "Authentication token is invalid."
+            exit 1
+          else
+            echo "Authentication token is valid."
+          fi
+        else
+          echo "Authentication token is invalid."
+          exit 1
+        fi
