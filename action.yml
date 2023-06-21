@@ -26,7 +26,7 @@ runs:
       name: Authenticate CLI with token
       shell: bash
       run: |-
-        bls login --auth-token ${{inputs.BLOCKLESS_ACCESS_TOKEN}}
+        bls login --auth-url ${{inputs.BLOCKLESS_ENDPOINT_URL}} --auth-token ${{inputs.BLOCKLESS_ACCESS_TOKEN}}
 
     - if: ${{ inputs.BLOCKLESS_ACCESS_TOKEN == null }}
       name: Authenticate CLI with OIDC
@@ -42,7 +42,7 @@ runs:
           exit 1
         else
           JWT=$(echo $RESPONSE | jq -j '.token')
-          bls login --auth-token $JWT
+          bls login --auth-url ${{inputs.BLOCKLESS_ENDPOINT_URL}} --auth-token $JWT
         fi
 
     - name: Verify Auth Token
